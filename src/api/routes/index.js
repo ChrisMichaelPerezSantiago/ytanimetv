@@ -14,29 +14,18 @@ router.get('/Search/:query' , (req , res) =>{
     });
 });
 
-//router.get('/EpisodesVideo/:id' , (req , res) =>{
-//  const id = req.params.id;
-//  api.animeEpisodesVideo(id)
-//    .then(videos =>{
-//      res.status(200).json({
-//        videos
-//      });
-//    }).catch((err) =>{
-//      console.error(err);
-//    });
-//});
 
-//router.get('/AnimeVideo/:id' , (req , res) =>{
-//  const id = req.params.id;
-//  api.getAnimeVideo(id)
-//    .then(video =>{
-//      res.status(200).json({
-//        video
-//      });
-//    }).catch((err) =>{
-//      console.error(err);
-//    });
-//});
+router.get('/AnimeVideo/:id' , (req , res) =>{
+  const id = req.params.id;
+  api.getAnimeVideo(id)
+    .then(video =>{
+      res.status(200).json({
+        video
+      });
+    }).catch((err) =>{
+      console.error(err);
+    });
+});
 
 router.get('/LatestAnime/:page' , (req , res) =>{
   const page = req.params.page;
