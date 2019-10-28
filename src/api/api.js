@@ -22,7 +22,7 @@ const searchAnime = async(query) =>{
       synopsis: extra[1] ? extra[1].synopsis : null,
       status: extra[1] ? extra[1].status : null,
       total_eps: extra[1] ? extra[1].total_eps : null,
-      episodes: await animeEpisodesVideo(id)
+      episodes: await animeEpisodesId(id)
     })));
   });
   return Promise.all(promises);
@@ -45,7 +45,7 @@ const mostPopularAnimes = async(page) =>{
       synopsis: extra[1] ? extra[1].synopsis : null,
       status: extra[1] ? extra[1].status : null,
       total_eps: extra[1] ? extra[1].total_eps : null,
-      episodes: await animeEpisodesVideo(id)
+      episodes: await animeEpisodesId(id)
     })));
   });
   return await Promise.all(promises);
@@ -68,7 +68,7 @@ const latestAnime = async(page) =>{
       synopsis: extra[1] ? extra[1].synopsis : null,
       status: extra[1] ? extra[1].status : null,
       total_eps: extra[1] ? extra[1].total_eps : null,
-      episodes: await animeEpisodesVideo(id)
+      episodes: await animeEpisodesId(id)
     })));
   });
   return Promise.all(promises);
@@ -84,15 +84,14 @@ const latestChapters = async(page) =>{
     const $element = $(element);
     const title = $element.find('div.video-card div.video-card-body div.video-title a').text().split('-')[0].trim();
     const id = $element.find('div.video-card div.video-card-body div.video-title a').attr('href').split('/')[4]
-    const episode = $element.find('div.video-card div.video-card-body div.video-title a').text().split('-')[1].trim();
+    const episode = $element.find('div.video-card div.video-card-body div.video-title a').text().split('-')[1].trim().match(/\d+/g)[0];
     const poster = $element.find('div.video-card a img').attr('src');
     promises.push(animeContentHandler(id).then(async extra => ({
       title: title || null,
-      id: id || null,
       poster: poster || null,
       //synopsis: extra[1] ? extra[1].synopsis : null,
-      episode: episode || null,
-      episodes: await getAnimeVideo(id)
+      episode: parseInt(episode , 10) || null,
+      id: id || null,
 
       //status: extra[1] ? extra[1].status : null,
       //total_eps: extra[1] ? extra[1].total_eps : null
@@ -101,7 +100,7 @@ const latestChapters = async(page) =>{
   return await Promise.all(promises);
 };
 
-const animeEpisodesVideo = async(id) =>{
+const animeEpisodesId = async(id) =>{
   const res = await fetch(`${ANIME_URL}${id}`);
   const body = await res.text();
   const $ = cheerio.load(body);
@@ -137,16 +136,16 @@ const animeEpisodesVideo = async(id) =>{
       });
     });
   });
-  const lists = epsIDs.map(async doc =>{
+  const lists = epsIDs.map( doc =>{
     return{
       episode: doc.episode || null,
-      video: await getAnimeVideo(doc.eps_id) || null
+      id: doc.eps_id || null
     }
   });
-  //let listByEps = lists.reduce(async(id , doc) =>{
-  //  id[doc.episode] = await doc;
-  //  return id;
-  //} , {});
+  let listByEps = lists.reduce((id , doc) =>{
+    id[doc.episode] =  doc;
+    return id;
+  } , {});
   //ordered.map(promises =>{
   //  promises.video.then(v =>{
   //    console.log(promises.episode ,v)
@@ -165,7 +164,7 @@ const animeEpisodesVideo = async(id) =>{
   //
   //const ordered = lists.reverse();
   //return P
-  return Promise.all(lists);
+  return listByEps;
 };
 
 
@@ -231,4 +230,5 @@ module.exports = {
   mostPopularAnimes,
   latestAnime,
   latestChapters,
+  getAnimeVideo
 };
