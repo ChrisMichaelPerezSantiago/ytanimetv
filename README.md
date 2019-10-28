@@ -3,7 +3,7 @@
 ![node version](https://img.shields.io/badge/node->=10.16.x-brightgreen.svg)
 ![npm version](https://img.shields.io/badge/npm->=6.9.x-brightgreen.svg)
 
- <a href="https://nodei.co/npm/jkanime/"><img src="https://nodei.co/npm/ytanimetv.png"></a>
+ <a href="https://nodei.co/npm/ytanimetv/"><img src="https://nodei.co/npm/ytanimetv.png"></a>
 
 
 > This API will give you access to the content of the ytanime.tv page. And you can enjoy all the chapters with sub in Spanish.
