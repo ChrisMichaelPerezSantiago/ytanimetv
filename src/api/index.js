@@ -11,7 +11,8 @@ router.get('/', (req, res) => {
         'Search': '/api/v1/Search/[query]',
         'LatestAnime': '/api/v1/LatestAnime/[page]',
         'LatestChapters': '/api/v1/LatestChapters/[page]',
-        'MostPopularAnimes': '/api/v1/MostPopularAnimes/[page]'
+        'MostPopularAnimes': '/api/v1/MostPopularAnimes/[page]',
+        'AnimeVideo': '/api/v1/AnimeVideo/[id]'
       }
     ]
   });
